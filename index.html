@@ -14,10 +14,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   </head>
-
   <body class="bg-blue-100">
     <div x-data="shoppingCart()" x-init="init()">
-        <!-- Header Component -->
+      <!-- Header Component -->
       <header class="sticky top-0 z-50">
         <nav class="bg-gray-500 border-gray-200">
           <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -59,11 +58,11 @@
         </nav>
       </header>
 
-    <!-- Loading State -->
-    <div x-show="loading" class="text-center mt-8 text-lg">Loading...</div>
+      <!-- Loading State -->
+      <div x-show="loading" class="text-center mt-8 text-lg">Loading...</div>
 
-    <!-- Filter and Sort Controls -->
-    <div class="max-w-screen-xl mx-auto mt-8">
+      <!-- Filter and Sort Controls -->
+      <div class="max-w-screen-xl mx-auto mt-8">
         <div x-data="searchComponent()" class="relative w-full">
           <input
             type="search"
@@ -83,24 +82,24 @@
             <span class="sr-only">Search</span>
           </button>
         </div>
-
+        
         <select x-model="selectedCategory" x-on:change="filterProducts" class="bg-gray-200 p-2 rounded">
-            <option value="">All Categories</option>
-            <template x-for="category in categories" :key="category">
-              <option :value="category" x-text="category"></option>
-            </template>
+          <option value="">All Categories</option>
+          <template x-for="category in categories" :key="category">
+            <option :value="category" x-text="category"></option>
+          </template>
+        </select>
+        <div class="flex sm:w-[95%] max-w-[21rem] md:w-full mt-4">
+          <label for="sort" class="w-20 my-auto font-semibold">Sort by price: </label>
+          <select x-model="sorting" x-on:change="handleSort" id="sort" class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+            <option value="default">Default</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
           </select>
-          <div class="flex sm:w-[95%] max-w-[21rem] md:w-full mt-4">
-            <label for="sort" class="w-20 my-auto font-semibold">Sort by price: </label>
-            <select x-model="sorting" x-on:change="handleSort" id="sort" class="p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-              <option value="default">Default</option>
-              <option value="low">Price: Low to High</option>
-              <option value="high">Price: High to Low</option>
-            </select>
-          </div>
         </div>
+      </div>
 
-        <!-- Product Grid -->
+      <!-- Product Grid -->
       <div class="max-w-screen-xl mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <template x-for="product in filteredProducts" :key="product.id">
           <div class="bg-white p-4 rounded shadow hover:shadow-lg cursor-pointer flex flex-col h-full" x-on:click="openModal(product.id)">
@@ -135,164 +134,161 @@
           </div>
         </template>
       </div>
+      
 
       <!-- Product Modal -->
     <div x-show="modalOpen" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full relative">
-          <button x-on:click="closeModal" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-          <div class="text-center">
-            <img :src="selectedProduct.image" :alt="selectedProduct.title" class="h-48 w-full object-contain rounded">
-            <h2 class="mt-4 text-2xl font-bold" x-text="selectedProduct.title"></h2>
-            <p class="mt-2 text-gray-600" x-text="selectedProduct.description"></p>
-            <p class="mt-2 text-gray-600 font-semibold" x-text="`$${selectedProduct.price}`"></p>
-            
-            <!-- Category Label -->
-            <p class="mt-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10" x-text="selectedProduct.category"></p>
+  <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full relative">
+    <button x-on:click="closeModal" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="text-center">
+      <img :src="selectedProduct.image" :alt="selectedProduct.title" class="h-48 w-full object-contain rounded">
+      <h2 class="mt-4 text-2xl font-bold" x-text="selectedProduct.title"></h2>
+      <p class="mt-2 text-gray-600" x-text="selectedProduct.description"></p>
+      <p class="mt-2 text-gray-600 font-semibold" x-text="`$${selectedProduct.price}`"></p>
       
-            <div class="mt-2 flex items-center justify-center">
-              <template x-for="n in Math.round(selectedProduct.rating.rate)" :key="n">
-                <svg class="w-4 h-4 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M9.049 2.927C9.269 2.35 9.731 2.35 9.951 2.927L11.257 6.39a.753.753 0 00.567.486l3.486.507c.62.09.871.849.402 1.287l-2.521 2.458a.753.753 0 00-.217.666l.595 3.47c.106.618-.548 1.095-1.09.802l-3.119-1.64a.753.753 0 00-.698 0l-3.119 1.64c-.542.293-1.196-.184-1.09-.802l.595-3.47a.753.753 0 00-.217-.666L2.29 8.67c-.47-.438-.218-1.197.402-1.287l3.486-.507a.753.753 0 00.567-.486L9.049 2.927z" />
-                </svg>
-              </template>
-              <template x-for="n in 5 - Math.round(selectedProduct.rating.rate)" :key="n">
-                <svg class="w-4 h-4 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M9.049 2.927C9.269 2.35 9.731 2.35 9.951 2.927L11.257 6.39a.753.753 0 00.567.486l3.486.507c.62.09.871.849.402 1.287l-2.521 2.458a.753.753 0 00-.217.666l.595 3.47c.106.618-.548 1.095-1.09.802l-3.119-1.64a.753.753 0 00-.698 0l-3.119 1.64c-.542.293-1.196-.184-1.09-.802l.595-3.47a.753.753 0 00-.217-.666L2.29 8.67c-.47-.438-.218-1.197.402-1.287l3.486-.507a.753.753 0 00.567-.486L9.049 2.927z" />
-                </svg>
-              </template>
-              <p class="ml-2 text-sm text-gray-600" x-text="`(${selectedProduct.rating.count} reviews)`"></p>
-            </div>
-            <button class="mt-4 bg-blue-500 text-white p-2 rounded w-full" x-on:click="addToCart(selectedProduct)">Add to Cart
-      
-          </div>
+      <!-- Category Label -->
+      <p class="mt-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10" x-text="selectedProduct.category"></p>
 
-          <script>
-            function shoppingCart() {
-              return {
-                loading: true,
-                products: [],
-                originalProducts: [], // New property to store the original products
-                categories: [],
-                filteredProducts: [],
-                selectedCategory: "",
-                sorting: 'default', // Default sorting
-                modalOpen: false,
-                selectedProduct: {},
-                navbarOpen: false,
-      
-                async init() {
-                  await this.fetchCategories();
-                  await this.fetchProducts();
-                  this.loading = false;
-                },
-      
-                async fetchCategories() {
-                  try {
-                    const response = await fetch("https://fakestoreapi.com/products/categories");
-                    this.categories = await response.json();
-                  } catch (error) {
-                    console.error("Error fetching categories:", error);
-                  }
-                },
-      
-                async fetchProducts() {
-                  try {
-                    const response = await fetch("https://fakestoreapi.com/products");
-                    this.products = await response.json();
-                    this.originalProducts = [...this.products]; // Store original products
-                    this.filteredProducts = this.products;
-                  } catch (error) {
-                    console.error("Error fetching products:", error);
-                  }
-                },
-      
-                async openModal(productId) {
-                  try {
-                    const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
-                    this.selectedProduct = await response.json();
-                    this.modalOpen = true;
-                  } catch (error) {
-                    console.error("Error fetching product:", error);
-                  }
-                },
-      
-                
-      
-                closeModal() {
-                  this.modalOpen = false;
-                },
-      
-                filterProducts() {
-                  if (this.selectedCategory) {
-                    this.filteredProducts = this.products.filter(product => product.category === this.selectedCategory);
-                  } else {
-                    this.filteredProducts = this.products;
-                  }
-                  this.sortProducts();
-                },
-      
-                handleSort() {
-                  this.sortProducts();
-                },
-      
-                sortProducts() {
-                  if (this.sorting === "low") {
-                    this.filteredProducts.sort((a, b) => a.price - b.price);
-                  } else if (this.sorting === "high") {
-                    this.filteredProducts.sort((a, b) => b.price - a.price);
-                  } else {
-                    this.filteredProducts = [...this.originalProducts]; // Reset to original order
-                    if (this.selectedCategory) {
-                      this.filteredProducts = this.filteredProducts.filter(product => product.category === this.selectedCategory);
-                    }
-                  }
-                },
-      
-                resetFilters() {
-                  this.selectedCategory = "";
-                  this.sorting = 'default';
-                  this.filteredProducts = [...this.originalProducts];
-                },
-      
-                toggleNavbar() {
-                  this.navbarOpen = !this.navbarOpen;
-                },
-              };
+      <div class="mt-2 flex items-center justify-center">
+        <template x-for="n in Math.round(selectedProduct.rating.rate)" :key="n">
+          <svg class="w-4 h-4 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927C9.269 2.35 9.731 2.35 9.951 2.927L11.257 6.39a.753.753 0 00.567.486l3.486.507c.62.09.871.849.402 1.287l-2.521 2.458a.753.753 0 00-.217.666l.595 3.47c.106.618-.548 1.095-1.09.802l-3.119-1.64a.753.753 0 00-.698 0l-3.119 1.64c-.542.293-1.196-.184-1.09-.802l.595-3.47a.753.753 0 00-.217-.666L2.29 8.67c-.47-.438-.218-1.197.402-1.287l3.486-.507a.753.753 0 00.567-.486L9.049 2.927z" />
+          </svg>
+        </template>
+        <template x-for="n in 5 - Math.round(selectedProduct.rating.rate)" :key="n">
+          <svg class="w-4 h-4 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927C9.269 2.35 9.731 2.35 9.951 2.927L11.257 6.39a.753.753 0 00.567.486l3.486.507c.62.09.871.849.402 1.287l-2.521 2.458a.753.753 0 00-.217.666l.595 3.47c.106.618-.548 1.095-1.09.802l-3.119-1.64a.753.753 0 00-.698 0l-3.119 1.64c-.542.293-1.196-.184-1.09-.802l.595-3.47a.753.753 0 00-.217-.666L2.29 8.67c-.47-.438-.218-1.197.402-1.287l3.486-.507a.753.753 0 00.567-.486L9.049 2.927z" />
+          </svg>
+        </template>
+        <p class="ml-2 text-sm text-gray-600" x-text="`(${selectedProduct.rating.count} reviews)`"></p>
+      </div>
+      <button class="mt-4 bg-blue-500 text-white p-2 rounded w-full" x-on:click="addToCart(selectedProduct)">Add to Cart
+
+    </div>
+    
+
+    <script>
+      function shoppingCart() {
+        return {
+          loading: true,
+          products: [],
+          originalProducts: [], // New property to store the original products
+          categories: [],
+          filteredProducts: [],
+          selectedCategory: "",
+          sorting: 'default', // Default sorting
+          modalOpen: false,
+          selectedProduct: {},
+          navbarOpen: false,
+
+          async init() {
+            await this.fetchCategories();
+            await this.fetchProducts();
+            this.loading = false;
+          },
+
+          async fetchCategories() {
+            try {
+              const response = await fetch("https://fakestoreapi.com/products/categories");
+              this.categories = await response.json();
+            } catch (error) {
+              console.error("Error fetching categories:", error);
             }
-      
-            
-        function searchComponent() {
-          return {
-            searchTerm: '',
-            filteredProducts: [],
-      
-            init() {
-              // Initialize filteredProducts with all products
-              this.filteredProducts = this.products; // Assuming 'products' is your original product list
-            },
-      
-            handleSearch() {
-              this.filteredProducts = this.products.filter(product =>
-                product.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                product.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-                product.category.toLowerCase().includes(this.searchTerm.toLowerCase())
-              );
-            },
-      
-            products: [], // Populate this with your list of products
-          }
-        }
-      
-      
-          </script>
-        </body>
-      </html>
-      
-          
-      
+          },
 
-  
+          async fetchProducts() {
+            try {
+              const response = await fetch("https://fakestoreapi.com/products");
+              this.products = await response.json();
+              this.originalProducts = [...this.products]; // Store original products
+              this.filteredProducts = this.products;
+            } catch (error) {
+              console.error("Error fetching products:", error);
+            }
+          },
+
+          async openModal(productId) {
+            try {
+              const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
+              this.selectedProduct = await response.json();
+              this.modalOpen = true;
+            } catch (error) {
+              console.error("Error fetching product:", error);
+            }
+          },
+
+          
+
+          closeModal() {
+            this.modalOpen = false;
+          },
+
+          filterProducts() {
+            if (this.selectedCategory) {
+              this.filteredProducts = this.products.filter(product => product.category === this.selectedCategory);
+            } else {
+              this.filteredProducts = this.products;
+            }
+            this.sortProducts();
+          },
+
+          handleSort() {
+            this.sortProducts();
+          },
+
+          sortProducts() {
+            if (this.sorting === "low") {
+              this.filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (this.sorting === "high") {
+              this.filteredProducts.sort((a, b) => b.price - a.price);
+            } else {
+              this.filteredProducts = [...this.originalProducts]; // Reset to original order
+              if (this.selectedCategory) {
+                this.filteredProducts = this.filteredProducts.filter(product => product.category === this.selectedCategory);
+              }
+            }
+          },
+
+          resetFilters() {
+            this.selectedCategory = "";
+            this.sorting = 'default';
+            this.filteredProducts = [...this.originalProducts];
+          },
+
+          toggleNavbar() {
+            this.navbarOpen = !this.navbarOpen;
+          },
+        };
+      }
+
+      
+  function searchComponent() {
+    return {
+      searchTerm: '',
+      filteredProducts: [],
+
+      init() {
+        // Initialize filteredProducts with all products
+        this.filteredProducts = this.products; // Assuming 'products' is your original product list
+      },
+
+      handleSearch() {
+        this.filteredProducts = this.products.filter(product =>
+          product.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          product.description.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          product.category.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+      },
+
+      products: [], // Populate this with your list of products
+    }
+  }
+
+
+    </script>
+  </body>
+</html>
