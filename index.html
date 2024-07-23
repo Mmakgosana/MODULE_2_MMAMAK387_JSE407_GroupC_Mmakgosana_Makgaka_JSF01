@@ -136,4 +136,40 @@
         </template>
       </div>
 
+      <!-- Product Modal -->
+    <div x-show="modalOpen" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full relative">
+          <button x-on:click="closeModal" class="absolute top-4 right-4 text-gray-600 hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div class="text-center">
+            <img :src="selectedProduct.image" :alt="selectedProduct.title" class="h-48 w-full object-contain rounded">
+            <h2 class="mt-4 text-2xl font-bold" x-text="selectedProduct.title"></h2>
+            <p class="mt-2 text-gray-600" x-text="selectedProduct.description"></p>
+            <p class="mt-2 text-gray-600 font-semibold" x-text="`$${selectedProduct.price}`"></p>
+            
+            <!-- Category Label -->
+            <p class="mt-2 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10" x-text="selectedProduct.category"></p>
+      
+            <div class="mt-2 flex items-center justify-center">
+              <template x-for="n in Math.round(selectedProduct.rating.rate)" :key="n">
+                <svg class="w-4 h-4 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927C9.269 2.35 9.731 2.35 9.951 2.927L11.257 6.39a.753.753 0 00.567.486l3.486.507c.62.09.871.849.402 1.287l-2.521 2.458a.753.753 0 00-.217.666l.595 3.47c.106.618-.548 1.095-1.09.802l-3.119-1.64a.753.753 0 00-.698 0l-3.119 1.64c-.542.293-1.196-.184-1.09-.802l.595-3.47a.753.753 0 00-.217-.666L2.29 8.67c-.47-.438-.218-1.197.402-1.287l3.486-.507a.753.753 0 00.567-.486L9.049 2.927z" />
+                </svg>
+              </template>
+              <template x-for="n in 5 - Math.round(selectedProduct.rating.rate)" :key="n">
+                <svg class="w-4 h-4 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927C9.269 2.35 9.731 2.35 9.951 2.927L11.257 6.39a.753.753 0 00.567.486l3.486.507c.62.09.871.849.402 1.287l-2.521 2.458a.753.753 0 00-.217.666l.595 3.47c.106.618-.548 1.095-1.09.802l-3.119-1.64a.753.753 0 00-.698 0l-3.119 1.64c-.542.293-1.196-.184-1.09-.802l.595-3.47a.753.753 0 00-.217-.666L2.29 8.67c-.47-.438-.218-1.197.402-1.287l3.486-.507a.753.753 0 00.567-.486L9.049 2.927z" />
+                </svg>
+              </template>
+              <p class="ml-2 text-sm text-gray-600" x-text="`(${selectedProduct.rating.count} reviews)`"></p>
+            </div>
+            <button class="mt-4 bg-blue-500 text-white p-2 rounded w-full" x-on:click="addToCart(selectedProduct)">Add to Cart
+      
+          </div>
+          
+      
+
   
